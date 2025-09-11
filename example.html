@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Icon Set Example</title>
+  <!-- Include Phosphor Icons (duotone + bold for heavier look) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css">
+  <style>
+    body {
+      background-color: #0d1b2a; /* dark background */
+      color: #c0d6e4;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 30px;
+    }
+    .icon-card {
+      width: 120px;
+      height: 120px;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+    .icon-card:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .icon {
+      font-size: 36px;
+      color: #7ecdfc;
+      filter: drop-shadow(0 0 8px rgba(126, 205, 252, 0.8));
+      margin-bottom: 12px;
+    }
+    .icon-label {
+      font-size: 14px;
+      text-align: center;
+      color: #a8cfe8;
+    }
+    /* heavier / emphasis style */
+    .icon-bold {
+      font-size: 44px;
+      color: #a4e0ff;
+      filter: drop-shadow(0 0 12px rgba(164, 224, 255, 0.9));
+    }
+  </style>
+</head>
+<body>
+  <div class="icon-grid">
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-upload-simple icon"></i>
+      <div class="icon-label">Upload</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-file-text icon"></i>
+      <div class="icon-label">Annual Report</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-arrows-clockwise icon"></i>
+      <div class="icon-label">Transform File</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-scissors icon"></i>
+      <div class="icon-label">Slice File</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-brain icon-bold"></i>
+      <div class="icon-label">AI Analysis</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-brackets-curly icon"></i>
+      <div class="icon-label">JSON</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-magnifying-glass icon"></i>
+      <div class="icon-label">Review Figures</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-user icon"></i>
+      <div class="icon-label">Client User</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-user-gear icon"></i>
+      <div class="icon-label">Bank Reviewer</div>
+    </div>
+
+    <div class="icon-card">
+      <i class="ph-duotone ph-chart-bar icon"></i>
+      <div class="icon-label">Use Extracted Data</div>
+    </div>
+
+  </div>
+</body>
+</html>

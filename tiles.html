@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Visual Magic - System Flow</title>
+    <!-- Include Phosphor Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c1429 0%, #1a2847 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+        }
+
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .icon-card {
+            width: 140px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.4),
+                0 0 25px rgba(56, 189, 248, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .icon-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            padding: 1px;
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.25) 0%,
+                    rgba(56, 189, 248, 0.15) 30%,
+                    transparent 60%,
+                    rgba(56, 189, 248, 0.08) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+        }
+
+        .icon-card::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(ellipse 80px 60px at 20% 20%,
+                    rgba(255, 255, 255, 0.6) 0%,
+                    rgba(255, 255, 255, 0.3) 30%,
+                    rgba(56, 189, 248, 0.15) 60%,
+                    transparent 85%);
+            border-radius: 28px;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow:
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(56, 189, 248, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .icon {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 40px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.3));
+        }
+
+        .label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-align: center;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Enhanced styling for system flow tiles */
+        .icon-card .ph-brain {
+            color: rgba(164, 224, 255, 0.95);
+            filter: drop-shadow(0 0 12px rgba(164, 224, 255, 0.4));
+        }
+
+        .icon-card .ph-upload-simple {
+            color: rgba(34, 197, 94, 0.95);
+            filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.3));
+        }
+
+        .icon-card .ph-gear-six {
+            color: rgba(251, 191, 36, 0.95);
+            filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.3));
+        }
+
+        .icon-card .ph-magnifying-glass {
+            color: rgba(168, 85, 247, 0.95);
+            filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.3));
+        }
+
+        .icon-card .ph-gear-fine {
+            color: rgba(236, 72, 153, 0.95);
+            filter: drop-shadow(0 0 12px rgba(236, 72, 153, 0.3));
+        }
+
+        .icon-card .ph-play-circle {
+            color: rgba(239, 68, 68, 0.95);
+            filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.3));
+        }
+
+        /* Atmospheric Glow Variations */
+        .glow-variant-1 {
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 25px rgba(56, 189, 248, 0.12),
+                0 0 40px rgba(56, 189, 248, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-variant-1::after {
+            background: radial-gradient(ellipse 50px 40px at 75% 25%,
+                    rgba(255, 255, 255, 0.3) 0%,
+                    rgba(255, 255, 255, 0.15) 40%,
+                    rgba(56, 189, 248, 0.08) 70%,
+                    transparent 90%);
+            top: 0;
+            right: 0;
+            left: auto;
+            width: 60px;
+            height: 50px;
+            border-radius: 0 24px 0 0;
+        }
+
+        .glow-variant-2 {
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 30px rgba(56, 189, 248, 0.18),
+                0 0 50px rgba(56, 189, 248, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-variant-2::after {
+            background: radial-gradient(ellipse 45px 35px at 85% 15%,
+                    rgba(255, 255, 255, 0.5) 0%,
+                    rgba(255, 255, 255, 0.25) 30%,
+                    rgba(56, 189, 248, 0.15) 60%,
+                    transparent 80%);
+            top: 0;
+            right: 0;
+            left: auto;
+            width: 50px;
+            height: 40px;
+            border-radius: 0 24px 0 0;
+        }
+
+        .glow-variant-3 {
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(56, 189, 248, 0.08),
+                0 0 35px rgba(56, 189, 248, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-variant-3::after {
+            background: radial-gradient(ellipse 40px 35px at 70% 30%,
+                    rgba(255, 255, 255, 0.25) 0%,
+                    rgba(255, 255, 255, 0.12) 45%,
+                    rgba(56, 189, 248, 0.06) 75%,
+                    transparent 90%);
+            top: 0;
+            right: 0;
+            left: auto;
+            width: 50px;
+            height: 45px;
+            border-radius: 0 24px 0 0;
+        }
+
+        .glow-variant-4 {
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 35px rgba(56, 189, 248, 0.2),
+                0 0 60px rgba(56, 189, 248, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-variant-4::after {
+            background: radial-gradient(ellipse 55px 45px at 85% 15%,
+                    rgba(255, 255, 255, 0.4) 0%,
+                    rgba(255, 255, 255, 0.2) 30%,
+                    rgba(56, 189, 248, 0.12) 60%,
+                    transparent 80%);
+            top: 0;
+            right: 0;
+            left: auto;
+            width: 65px;
+            height: 55px;
+            border-radius: 0 24px 0 0;
+        }
+
+        /* Consistent border highlights from top-right */
+        .glow-variant-1::before {
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.2) 0%,
+                    transparent 50%);
+        }
+
+        .glow-variant-2::before {
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.25) 0%,
+                    transparent 60%);
+        }
+
+        .glow-variant-3::before {
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.15) 0%,
+                    transparent 45%);
+        }
+
+        .glow-variant-4::before {
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.3) 0%,
+                    transparent 55%);
+        }
+
+        /* Connection Lines Styling */
+        .connection-lines {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .vertical-line {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 0;
+            background: linear-gradient(180deg,
+                    rgba(56, 189, 248, 0.3) 0%,
+                    rgba(56, 189, 248, 0.7) 50%,
+                    rgba(56, 189, 248, 0.9) 100%);
+            border-radius: 1px;
+            opacity: 0;
+            transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow:
+                0 0 10px rgba(56, 189, 248, 0.6),
+                0 0 20px rgba(56, 189, 248, 0.3),
+                0 0 30px rgba(56, 189, 248, 0.1);
+            transform-origin: bottom center;
+        }
+
+        .vertical-line-down {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 0;
+            background: linear-gradient(180deg,
+                    rgba(56, 189, 248, 0.9) 0%,
+                    rgba(56, 189, 248, 0.7) 50%,
+                    rgba(56, 189, 248, 0.3) 100%);
+            border-radius: 1px;
+            opacity: 0;
+            transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow:
+                0 0 10px rgba(56, 189, 248, 0.6),
+                0 0 20px rgba(56, 189, 248, 0.3),
+                0 0 30px rgba(56, 189, 248, 0.1);
+            transform-origin: top center;
+        }
+
+        .horizontal-line-left,
+        .horizontal-line-right {
+            position: absolute;
+            top: -80px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                    rgba(56, 189, 248, 0.3) 0%,
+                    rgba(56, 189, 248, 0.7) 50%,
+                    rgba(56, 189, 248, 0.9) 100%);
+            border-radius: 1px;
+            opacity: 0;
+            transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+                opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+            box-shadow:
+                0 0 8px rgba(56, 189, 248, 0.5),
+                0 0 16px rgba(56, 189, 248, 0.2);
+        }
+
+        .horizontal-line-left {
+            right: 50%;
+            background: linear-gradient(-90deg,
+                    rgba(56, 189, 248, 0.3) 0%,
+                    rgba(56, 189, 248, 0.7) 50%,
+                    rgba(56, 189, 248, 0.9) 100%);
+        }
+
+        .horizontal-line-right {
+            left: 50%;
+        }
+
+        .horizontal-line-left-down,
+        .horizontal-line-right-down {
+            position: absolute;
+            bottom: -80px;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                    rgba(56, 189, 248, 0.3) 0%,
+                    rgba(56, 189, 248, 0.7) 50%,
+                    rgba(56, 189, 248, 0.9) 100%);
+            border-radius: 1px;
+            opacity: 0;
+            transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+                opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+            box-shadow:
+                0 0 8px rgba(56, 189, 248, 0.5),
+                0 0 16px rgba(56, 189, 248, 0.2);
+        }
+
+        .horizontal-line-left-down {
+            right: 50%;
+            background: linear-gradient(-90deg,
+                    rgba(56, 189, 248, 0.3) 0%,
+                    rgba(56, 189, 248, 0.7) 50%,
+                    rgba(56, 189, 248, 0.9) 100%);
+        }
+
+        .horizontal-line-right-down {
+            left: 50%;
+        }
+
+        /* Active state animations */
+        .main-tile.active .vertical-line {
+            height: 80px;
+            opacity: 1;
+            animation: glow-pulse 1.5s ease-in-out infinite alternate;
+        }
+
+        .main-tile.active .vertical-line-down {
+            height: 80px;
+            opacity: 1;
+            animation: glow-pulse 1.5s ease-in-out infinite alternate;
+        }
+
+        .main-tile.active .horizontal-line-left,
+        .main-tile.active .horizontal-line-right {
+            width: 24px;
+            opacity: 1;
+        }
+
+        .main-tile.active .horizontal-line-left-down,
+        .main-tile.active .horizontal-line-right-down {
+            width: 24px;
+            opacity: 1;
+        }
+
+        @keyframes glow-pulse {
+            0% {
+                box-shadow:
+                    0 0 10px rgba(56, 189, 248, 0.6),
+                    0 0 20px rgba(56, 189, 248, 0.3),
+                    0 0 30px rgba(56, 189, 248, 0.1);
+            }
+
+            100% {
+                box-shadow:
+                    0 0 15px rgba(56, 189, 248, 0.8),
+                    0 0 30px rgba(56, 189, 248, 0.4),
+                    0 0 45px rgba(56, 189, 248, 0.2);
+            }
+        }
+
+        /* Dynamic Tiles Styling */
+        .dynamic-tile {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(139, 92, 246, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            opacity: 0;
+            transform: scale(0.8) translateY(10px);
+        }
+
+        .dynamic-tile::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg,
+                    rgba(139, 92, 246, 0.3) 0%,
+                    transparent 50%,
+                    rgba(139, 92, 246, 0.15) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+        }
+
+        .dynamic-tile::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(ellipse at top right,
+                    rgba(255, 255, 255, 0.3) 0%,
+                    rgba(255, 255, 255, 0.15) 30%,
+                    rgba(139, 92, 246, 0.1) 60%,
+                    transparent 80%);
+            border-radius: 0 20px 0 0;
+            pointer-events: none;
+            mix-blend-mode: soft-light;
+        }
+
+        .dynamic-tile .icon {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 32px;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 8px rgba(139, 92, 246, 0.3));
+        }
+
+        .dynamic-tile:hover {
+            transform: scale(1.03) translateY(-4px);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.35),
+                0 0 30px rgba(139, 92, 246, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Position dynamic tiles */
+        .left-tile,
+        .right-tile {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .left-tile.visible,
+        .right-tile.visible {
+            opacity: 1;
+            transform: scale(1);
+            transition-delay: 0.3s;
+        }
+
+        /* Enhanced glow animation for dynamic tiles */
+        @keyframes tile-appear {
+            0% {
+                opacity: 0;
+                transform: scale(0.7) rotateY(20deg);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02) rotateY(-5deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        .dynamic-tile.animate-in {
+            animation: tile-appear 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Custom SVG Icon Styling */
+        .custom-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-icon img {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 2px 8px rgba(139, 92, 246, 0.3));
+        }
+
+        /* Magical ChatGPT Tile */
+        .magical-tile {
+            position: relative;
+            overflow: visible;
+        }
+
+        .magical-tile::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 23px;
+            padding: 3px;
+            background: linear-gradient(45deg, 
+                #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8, #6c5ce7);
+            background-size: 300% 300%;
+            animation: magical-border 3s ease infinite;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            z-index: -1;
+        }
+
+        .magical-tile .custom-icon img {
+            filter: drop-shadow(0 0 8px rgba(9, 163, 127, 0.6)) 
+                    drop-shadow(0 0 16px rgba(9, 163, 127, 0.4))
+                    drop-shadow(0 0 24px rgba(9, 163, 127, 0.2));
+            animation: magical-glow 2s ease-in-out infinite alternate;
+        }
+
+        .magical-tile .custom-icon img[src*="ChatGPT-Logo"] {
+            /* Overlay the ChatGPT logo with the specified green color */
+            filter: drop-shadow(0 0 8px rgba(9, 163, 127, 0.6)) 
+                    drop-shadow(0 0 16px rgba(9, 163, 127, 0.4))
+                    drop-shadow(0 0 24px rgba(9, 163, 127, 0.2))
+                    brightness(0) saturate(100%) 
+                    invert(52%) sepia(89%) saturate(434%) hue-rotate(120deg) brightness(92%) contrast(92%);
+            animation: magical-glow-colored 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes magical-border {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes magical-glow {
+            0% {
+                filter: drop-shadow(0 0 8px rgba(16, 163, 127, 0.6)) 
+                        drop-shadow(0 0 16px rgba(16, 163, 127, 0.4))
+                        drop-shadow(0 0 24px rgba(16, 163, 127, 0.2));
+            }
+            100% {
+                filter: drop-shadow(0 0 12px rgba(16, 163, 127, 0.8)) 
+                        drop-shadow(0 0 24px rgba(16, 163, 127, 0.6))
+                        drop-shadow(0 0 36px rgba(16, 163, 127, 0.4));
+            }
+        }
+
+        @keyframes magical-glow-colored {
+            0% {
+                filter: drop-shadow(0 0 8px rgba(9, 163, 127, 0.6)) 
+                        drop-shadow(0 0 16px rgba(9, 163, 127, 0.4))
+                        drop-shadow(0 0 24px rgba(9, 163, 127, 0.2))
+                        brightness(0) saturate(100%) 
+                        invert(52%) sepia(89%) saturate(434%) hue-rotate(120deg) brightness(92%) contrast(92%);
+            }
+            100% {
+                filter: drop-shadow(0 0 12px rgba(9, 163, 127, 0.8)) 
+                        drop-shadow(0 0 24px rgba(9, 163, 127, 0.6))
+                        drop-shadow(0 0 36px rgba(9, 163, 127, 0.4))
+                        brightness(0) saturate(100%) 
+                        invert(52%) sepia(89%) saturate(434%) hue-rotate(120deg) brightness(98%) contrast(98%);
+            }
+        }
+
+        /* Terminal Display Styling */
+        .terminal-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .terminal-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .terminal-window {
+            width: 500px;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-family: 'Monaco', 'Consolas', 'Ubuntu Mono', monospace;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 25px rgba(56, 189, 248, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot.red {
+            background: #ff5f57;
+        }
+
+        .dot.yellow {
+            background: #ffbd2e;
+        }
+
+        .dot.green {
+            background: #28ca42;
+        }
+
+        .terminal-title {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .terminal-body {
+            padding: 15px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-line {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            height: 100%;
+        }
+
+        .prompt {
+            color: #28ca42;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .command {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            line-height: 1.4;
+            flex: 1;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .cursor {
+            color: #28ca42;
+            font-weight: bold;
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% {
+                opacity: 1;
+            }
+            51%, 100% {
+                opacity: 0;
+            }
+        }
+
+        /* Brand Logo Styling */
+        .brand-logo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .brand-logo:hover {
+            opacity: 1;
+        }
+
+        .brand-logo img {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Central Play Button Styling */
+        .play-button-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .central-play-button {
+            width: 180px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 25px rgba(56, 189, 248, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .central-play-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            padding: 1px;
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.25) 0%,
+                    rgba(56, 189, 248, 0.15) 30%,
+                    transparent 60%,
+                    rgba(56, 189, 248, 0.08) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+        }
+
+        .central-play-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 30px;
+            background: radial-gradient(ellipse at top right,
+                    rgba(255, 255, 255, 0.6) 0%,
+                    rgba(255, 255, 255, 0.3) 30%,
+                    rgba(56, 189, 248, 0.15) 60%,
+                    transparent 85%);
+            border-radius: 0 30px 0 0;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+
+        .central-play-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                0 0 35px rgba(56, 189, 248, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .central-play-button .icon {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 24px;
+            margin-bottom: 0;
+            filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.3));
+        }
+
+        .central-play-button .label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .central-play-button.active {
+            /* Keep the same neutral styling when active */
+        }
+
+        .central-play-button.active::before {
+            /* Keep the same neutral styling when active */
+        }
+
+        .central-play-button.active::after {
+            /* Keep the same neutral styling when active */
+        }
+
+        .central-play-button.active .icon {
+            /* Keep the same neutral styling when active */
+        }
+
+        .central-play-button.active:hover {
+            /* Use the same hover effects as the base state */
+            transform: translateY(-3px) scale(1.05);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                0 0 35px rgba(56, 189, 248, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                gap: 20px;
+            }
+
+            .icon-card {
+                width: 100px;
+                height: 100px;
+            }
+
+            .dynamic-tile {
+                width: 100px;
+                height: 100px;
+            }
+
+            .left-tile {
+                left: -130px;
+            }
+
+            .right-tile {
+                right: -130px;
+            }
+
+            .main-tile.active .vertical-line {
+                height: 70px;
+            }
+
+            .main-tile.active .horizontal-line-left,
+            .main-tile.active .horizontal-line-right {
+                width: 20px;
+            }
+
+            .horizontal-line-left,
+            .horizontal-line-right {
+                top: -70px;
+            }
+
+            .central-play-button {
+                width: 150px;
+                height: 50px;
+            }
+
+            .central-play-button .icon {
+                font-size: 20px;
+            }
+
+            .central-play-button .label {
+                font-size: 12px;
+            }
+
+            .terminal-window {
+                width: 90%;
+                max-width: 400px;
+            }
+
+            .terminal-body {
+                padding: 12px;
+                height: 70px;
+            }
+
+            .command, .prompt {
+                font-size: 12px;
+            }
+
+            .brand-logo {
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .brand-logo img {
+                height: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-content">
+        <div class="container">
+            <div class="icon-card glow-variant-1 main-tile" data-tile="0">
+                <div class="icon">
+                    <i class="ph-duotone ph-upload-simple"></i>
+                </div>
+                <div class="label">Upload</div>
+                <div class="connection-lines">
+                    <div class="vertical-line"></div>
+                    <div class="horizontal-line-left"></div>
+                    <div class="horizontal-line-right"></div>
+                </div>
+            </div>
+
+            <div class="icon-card glow-variant-2 main-tile" data-tile="1">
+                <div class="icon">
+                    <i class="ph-duotone ph-gear-six"></i>
+                </div>
+                <div class="label">Preprocessing</div>
+                <div class="connection-lines">
+                    <div class="vertical-line-down"></div>
+                    <div class="horizontal-line-left-down"></div>
+                    <div class="horizontal-line-right-down"></div>
+                </div>
+            </div>
+
+            <div class="icon-card glow-variant-3 main-tile" data-tile="2">
+                <div class="icon">
+                    <i class="ph-bold ph-brain"></i>
+                </div>
+                <div class="label">A.I. Analysis</div>
+                <div class="connection-lines">
+                    <div class="vertical-line"></div>
+                    <div class="horizontal-line-left"></div>
+                    <div class="horizontal-line-right"></div>
+                </div>
+            </div>
+
+            <div class="icon-card glow-variant-4 main-tile" data-tile="3">
+                <div class="icon">
+                    <i class="ph-duotone ph-gear-fine"></i>
+                </div>
+                <div class="label">Optimization</div>
+                <div class="connection-lines">
+                    <div class="vertical-line-down"></div>
+                    <div class="horizontal-line-left-down"></div>
+                    <div class="horizontal-line-right-down"></div>
+                </div>
+            </div>
+
+            <div class="icon-card glow-variant-1 main-tile" data-tile="4">
+                <div class="icon">
+                    <i class="ph-duotone ph-magnifying-glass"></i>
+                </div>
+                <div class="label">Review</div>
+                <div class="connection-lines">
+                    <div class="vertical-line"></div>
+                    <div class="horizontal-line-left"></div>
+                    <div class="horizontal-line-right"></div>
+                </div>
+            </div>
+
+            <div class="icon-card glow-variant-2 main-tile" data-tile="5">
+                <div class="icon">
+                    <i class="ph-duotone ph-play-circle"></i>
+                </div>
+                <div class="label">Operate</div>
+                <div class="connection-lines">
+                    <div class="vertical-line-down"></div>
+                    <div class="horizontal-line-left-down"></div>
+                    <div class="horizontal-line-right-down"></div>
+                </div>
+            </div>
+
+            <!-- Dynamic tiles will be inserted here -->
+            <div class="dynamic-tiles-container">
+                <!-- Step 1: Upload sub tiles -->
+                <div class="dynamic-tile left-tile hidden" data-step="0">
+                    <div class="icon">
+                        <i class="ph-duotone ph-file-pdf"></i>
+                    </div>
+                    <div class="label">PDF Files</div>
+                </div>
+
+                <div class="dynamic-tile right-tile hidden" data-step="0">
+                    <div class="icon">
+                        <i class="ph-duotone ph-image"></i>
+                    </div>
+                    <div class="label">Images</div>
+                </div>
+
+                <!-- Step 2: Preprocessing sub tiles -->
+                <div class="dynamic-tile left-tile-down hidden" data-step="1">
+                    <div class="icon">
+                        <i class="ph-duotone ph-resize"></i>
+                    </div>
+                    <div class="label">Resize Images</div>
+                </div>
+
+                <div class="dynamic-tile right-tile-down hidden" data-step="1">
+                    <div class="icon">
+                        <i class="ph-duotone ph-rows"></i>
+                    </div>
+                    <div class="label">Split Pages</div>
+                </div>
+
+                <!-- Step 3: A.I. Analysis sub tiles -->
+                <div class="dynamic-tile left-tile hidden" data-step="2">
+                    <div class="icon custom-icon">
+                        <img src="aistudio-af17733a.svg" alt="Azure Foundry" width="32" height="32">
+                    </div>
+                    <div class="label">Azure Foundry</div>
+                </div>
+
+                <div class="dynamic-tile right-tile hidden magical-tile" data-step="2">
+                    <div class="icon custom-icon">
+                        <img src="ChatGPT-Logo.svg" alt="ChatGPT" width="32" height="32">
+                    </div>
+                    <div class="label">GPT Models</div>
+                </div>
+
+                <!-- Step 4: Optimization sub tiles -->
+                <div class="dynamic-tile left-tile-down hidden" data-step="3">
+                    <div class="icon">
+                        <i class="ph-duotone ph-scroll"></i>
+                    </div>
+                    <div class="label">Structured Prompts</div>
+                </div>
+
+                <div class="dynamic-tile right-tile-down hidden" data-step="3">
+                    <div class="icon">
+                        <i class="ph-duotone ph-arrows-clockwise"></i>
+                    </div>
+                    <div class="label">Self Consistency</div>
+                </div>
+
+                <!-- Step 5: Review sub tiles -->
+                <div class="dynamic-tile left-tile hidden" data-step="4">
+                    <div class="icon">
+                        <i class="ph-duotone ph-user"></i>
+                    </div>
+                    <div class="label">User Review</div>
+                </div>
+
+                <div class="dynamic-tile right-tile hidden" data-step="4">
+                    <div class="icon">
+                        <i class="ph-duotone ph-check-circle"></i>
+                    </div>
+                    <div class="label">Validation</div>
+                </div>
+
+                <!-- Step 6: Operate sub tiles -->
+                <div class="dynamic-tile left-tile-down hidden" data-step="5">
+                    <div class="icon">
+                        <i class="ph-duotone ph-calculator"></i>
+                    </div>
+                    <div class="label">Rating Calculation</div>
+                </div>
+
+                <div class="dynamic-tile right-tile-down hidden" data-step="5">
+                    <div class="icon">
+                        <i class="ph-duotone ph-gear"></i>
+                    </div>
+                    <div class="label">Business Rules</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal Display -->
+    <div class="terminal-container">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+                <div class="terminal-title">AI Analysis Process</div>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line">
+                    <span class="prompt">$</span>
+                    <span class="command" id="terminalText"></span>
+                    <span class="cursor" id="terminalCursor">_</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Central Play Button -->
+    <div class="play-button-container">
+        <div class="central-play-button" id="mainPlayButton">
+            <div class="icon">
+                <i class="ph-bold ph-play"></i>
+            </div>
+            <div class="label">Start Journey</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mainTiles = document.querySelectorAll('.main-tile');
+            const playButton = document.getElementById('mainPlayButton');
+            const playIcon = playButton.querySelector('.icon i');
+            const playLabel = playButton.querySelector('.label');
+            const container = document.querySelector('.container');
+            const terminalContainer = document.querySelector('.terminal-container');
+            const terminalText = document.getElementById('terminalText');
+            const terminalCursor = document.getElementById('terminalCursor');
+
+            // Get all sub tile sets
+            const subTileSets = {
+                0: {
+                    left: document.querySelector('.left-tile[data-step="0"]'),
+                    right: document.querySelector('.right-tile[data-step="0"]'),
+                    direction: 'up'
+                },
+                1: {
+                    left: document.querySelector('.left-tile-down[data-step="1"]'),
+                    right: document.querySelector('.right-tile-down[data-step="1"]'),
+                    direction: 'down'
+                },
+                2: {
+                    left: document.querySelector('.left-tile[data-step="2"]'),
+                    right: document.querySelector('.right-tile[data-step="2"]'),
+                    direction: 'up'
+                },
+                3: {
+                    left: document.querySelector('.left-tile-down[data-step="3"]'),
+                    right: document.querySelector('.right-tile-down[data-step="3"]'),
+                    direction: 'down'
+                },
+                4: {
+                    left: document.querySelector('.left-tile[data-step="4"]'),
+                    right: document.querySelector('.right-tile[data-step="4"]'),
+                    direction: 'up'
+                },
+                5: {
+                    left: document.querySelector('.left-tile-down[data-step="5"]'),
+                    right: document.querySelector('.right-tile-down[data-step="5"]'),
+                    direction: 'down'
+                }
+            };
+
+            let isAnimating = false;
+            let tilesVisible = false;
+            let currentTileIndex = 0;
+            let currentActiveTile = null;
+
+            // Step explanations
+            const stepExplanations = [
+                "The user uploads unstructured data like pdf files, images or scans",
+                "Unstructured data is preprocessed to optimize as input for a.i. models",
+                "Advanced AI models extract structured data from the unstructured inputs",
+                "Multi-step specialized prompts are used together with optimization patterns like self-consistency for increased accuracy of extracted structured data",
+                "User-in-the-loop: experts review and validate the AI-generated results",
+                "Extracted structured data is ready to be used in business applications"
+            ];
+
+            // Typewriter effect function
+            function typeWriter(text, element, speed = 50) {
+                return new Promise((resolve) => {
+                    let i = 0;
+                    element.textContent = '';
+                    
+                    function type() {
+                        if (i < text.length) {
+                            element.textContent += text.charAt(i);
+                            i++;
+                            setTimeout(type, speed);
+                        } else {
+                            resolve();
+                        }
+                    }
+                    
+                    type();
+                });
+            }
+
+            // Show terminal with text
+            async function showTerminalText(text) {
+                terminalContainer.classList.add('visible');
+                terminalCursor.style.display = 'none';
+                await typeWriter(text, terminalText, 30);
+                terminalCursor.style.display = 'inline';
+            }
+
+            // Hide terminal
+            function hideTerminal() {
+                terminalContainer.classList.remove('visible');
+                terminalText.textContent = '';
+            }
+
+            function toggleDynamicTiles() {
+                if (isAnimating) return;
+
+                if (tilesVisible) {
+                    // Check if we've completed the journey
+                    if (currentTileIndex >= mainTiles.length - 1) {
+                        // Journey complete, reset everything
+                        hideDynamicTiles();
+                    } else {
+                        // Continue to next step
+                        showNextTileStep();
+                    }
+                } else {
+                    showNextTileStep();
+                }
+            }
+
+            function showNextTileStep() {
+                if (tilesVisible && currentActiveTile) {
+                    // Move to next step without hiding previous tiles
+                    currentTileIndex++;
+                    showDynamicTiles();
+                } else {
+                    // Start with first tile
+                    currentTileIndex = 0;
+                    showDynamicTiles();
+                }
+            }
+
+            async function showDynamicTiles() {
+                isAnimating = true;
+                tilesVisible = true;
+                currentActiveTile = mainTiles[currentTileIndex];
+
+                // Update play button appearance
+                playButton.classList.add('active');
+                playIcon.className = 'ph-bold ph-pause';
+                playLabel.textContent = `Step ${currentTileIndex + 1} of ${mainTiles.length}`;
+
+                // Show terminal text first
+                await showTerminalText(stepExplanations[currentTileIndex]);
+
+                // Get current sub tile set
+                const currentSubTiles = subTileSets[currentTileIndex];
+                if (!currentSubTiles) {
+                    // No sub tiles for this step, just finish
+                    setTimeout(() => {
+                        isAnimating = false;
+                    }, 650);
+                    return;
+                }
+
+                // Connection lines are now pre-built in HTML, just activate them
+
+                // Add active class to current tile to trigger lines animation
+                currentActiveTile.classList.add('active');
+
+                // Get current tile position within the container
+                const triggerOffset = {
+                    left: currentActiveTile.offsetLeft,
+                    top: currentActiveTile.offsetTop,
+                    width: currentActiveTile.offsetWidth,
+                    height: currentActiveTile.offsetHeight
+                };
+
+                // Calculate positions - tiles should be at the end of horizontal lines
+                const triggerCenterX = triggerOffset.left + triggerOffset.width / 2;
+                
+                let lineEndY, leftLineEndX, rightLineEndX;
+                
+                if (currentSubTiles.direction === 'down') {
+                    // Lines extend downward 80px from the bottom of the tile
+                    lineEndY = triggerOffset.top + triggerOffset.height + 80;
+                } else {
+                    // Lines extend upward 80px from the top of the tile
+                    lineEndY = triggerOffset.top - 80;
+                }
+                
+                leftLineEndX = triggerCenterX - 24;
+                rightLineEndX = triggerCenterX + 24;
+
+                // Show and position tiles
+                currentSubTiles.left.classList.remove('hidden');
+                currentSubTiles.right.classList.remove('hidden');
+
+                // Set positions so tiles connect to line endpoints
+                currentSubTiles.left.style.position = 'absolute';
+                currentSubTiles.right.style.position = 'absolute';
+
+                // Position tiles so their right edge aligns with left line endpoint, and left edge with right line endpoint
+                currentSubTiles.left.style.left = (leftLineEndX - 120) + 'px';  // tile width = 120px, so right edge touches line
+                currentSubTiles.left.style.top = (lineEndY - 60) + 'px';        // center vertically on line (tile height/2 = 60px)
+
+                currentSubTiles.right.style.left = (rightLineEndX) + 'px';      // left edge touches line
+                currentSubTiles.right.style.top = (lineEndY - 60) + 'px';
+
+                // Trigger animations with slight delay to allow lines to animate first
+                setTimeout(() => {
+                    currentSubTiles.left.classList.add('animate-in', 'visible');
+                    currentSubTiles.right.classList.add('animate-in', 'visible');
+                }, 200);
+
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 650);
+            }
+
+            function hideDynamicTiles() {
+                isAnimating = true;
+                tilesVisible = false;
+
+                // Hide terminal
+                hideTerminal();
+
+                // Update play button appearance - journey complete, reset everything
+                playButton.classList.remove('active');
+                playIcon.className = 'ph-bold ph-play';
+                playLabel.textContent = 'Start Journey';
+                currentTileIndex = 0;
+
+                // Remove active class from all tiles to hide all lines
+                mainTiles.forEach(tile => {
+                    tile.classList.remove('active');
+                });
+
+                // Hide all sub tiles
+                Object.values(subTileSets).forEach(subTileSet => {
+                    if (subTileSet.left && subTileSet.right) {
+                        subTileSet.left.classList.remove('visible', 'animate-in');
+                        subTileSet.right.classList.remove('visible', 'animate-in');
+                    }
+                });
+
+                setTimeout(() => {
+                    Object.values(subTileSets).forEach(subTileSet => {
+                        if (subTileSet.left && subTileSet.right) {
+                            subTileSet.left.classList.add('hidden');
+                            subTileSet.right.classList.add('hidden');
+                        }
+                    });
+                    isAnimating = false;
+                }, 400);
+            }
+
+            // Event listeners
+            playButton.addEventListener('click', toggleDynamicTiles);
+
+            // Add smooth hover effects to dynamic tiles
+            function addTileHoverEffects(tile) {
+                tile.addEventListener('mouseenter', function () {
+                    if (this.style.transform) {
+                        this.style.transform = this.style.transform.replace(/scale\([^)]*\)/, 'scale(1.05)');
+                    } else {
+                        this.style.transform = 'scale(1.05)';
+                    }
+                });
+
+                tile.addEventListener('mouseleave', function () {
+                    if (this.style.transform) {
+                        this.style.transform = this.style.transform.replace(/scale\([^)]*\)/, 'scale(1)');
+                    }
+                });
+            }
+
+            // Add hover effects to all sub tiles
+            Object.values(subTileSets).forEach(subTileSet => {
+                if (subTileSet.left && subTileSet.right) {
+                    addTileHoverEffects(subTileSet.left);
+                    addTileHoverEffects(subTileSet.right);
+                }
+            });
+
+            // Handle window resize
+            let resizeTimeout;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function () {
+                    if (tilesVisible) {
+                        hideDynamicTiles();
+                    }
+                }, 150);
+            });
+        });
+    </script>
+
+    <!-- Brand Logo -->
+    <div class="brand-logo">
+        <img src="Akkuro Logo (L) MarineX3.png" alt="Akkuro by Topicus">
+    </div>
+</body>
+
+</html>

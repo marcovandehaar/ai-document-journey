@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:chatgpt.com)",
+      "Read(//c/Users/marco/OneDrive - Topicus/Bureaublad/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
